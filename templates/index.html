@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Quantum Breath</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {font-family: sans-serif; text-align: center; background: #f0f8ff; padding: 20px;}
+    h1 {color: #00A86B;}
+    .btn {background: #00A86B; color: white; padding: 15px; margin: 10px; border-radius: 10px; font-size: 18px; text-decoration: none; display: inline-block;}
+    .tiktok {background: #000;}
+    .earnings {font-size: 20px; font-weight: bold; color: #333;}
+  </style>
+</head>
+<body>
+  <h1>Breathe. Earn. Power Up. ⚡</h1>
+  <p class="earnings">Your Earnings: KSh {{ user.earnings }}</p>
+  <input type="tel" id="phone" placeholder="Enter Phone" value="{{ phone }}" style="padding:10px;font-size:16px;margin:10px;">
+  <br>
+  <a href="#" class="btn" onclick="startBreathing()">START BREATHING</a>
+  <br>
+  <a href="/tiktok" class="btn tiktok">Follow @bullbolt1 ⚡</a>
+
+  <script>
+    function startBreathing() {
+      const phone = document.getElementById('phone').value;
+      window.location = `/breathe?phone=${phone}`;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Breathe</title>
+  <style>
+    body {text-align: center; font-family: sans-serif; background: #e6f3ff; padding: 20px;}
+    #timer {font-size: 80px; color: #00A86B; margin: 50px;}
+  </style>
+</head>
+<body>
+  <h2>Inhale... Exhale...</h2>
+  <div id="timer">30</div>
+
+  <script>
+    let time = 30;
+    const phone = new URLSearchParams(location.search).get('phone');
+    const timer = setInterval(() => {
+      time--;
+      document.getElementById('timer').innerText = time;
+      if (time <= 0) {
+        clearInterval(timer);
+        fetch('/earn', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({phone: phone})
+        })
+        .then(r => r.json())
+        .then(data => {
+          alert(`You earned KSh 5! Total: KSh ${data.earnings}`);
+          window.location = `/?phone=${phone}`;
+        });
+      }
+    }, 1000);
+  </script>
+</body>
+</html>
