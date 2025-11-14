@@ -5,101 +5,60 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quantum Breath</title>
 
-  <!-- PWA MANIFEST & ICONS -->
-  <link rel="manifest" href="/manifest.json">
-  <link rel="icon" href="/icon.png" sizes="192x192">
-  <link rel="apple-touch-icon" href="/icon.png">
+  <!-- PWA ICONS & MANIFEST -->
+<link rel="manifest" href="/static/manifest.json">
+<link rel="icon" href="/static/icon.png">
+  <link rel="icon" href="/icon.png?v=4" sizes="192x192">
+  <link rel="apple-touch-icon" href="/icon.png?v=4">
   <meta name="theme-color" content="#00A86B">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Quantum Breath">
 
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      text-align: center;
-      background: linear-gradient(to bottom, #f0f8ff, #e6f3ff);
-      padding: 20px;
-      margin: 0;
-      min-height: 100vh;
-    }
-    h1 {
-      color: #00A86B;
-      font-size: 2.3em;
-      margin-bottom: 10px;
-    }
-    .earnings {
-      font-size: 1.6em;
-      font-weight: bold;
-      color: #333;
-      margin: 20px 0;
-    }
-    .phone-input {
-      padding: 14px;
-      font-size: 16px;
-      width: 80%;
-      max-width: 300px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      margin: 10px auto;
-      display: block;
-    }
-    .btn {
-      background: #00A86B;
-      color: white;
-      padding: 16px 32px;
-      margin: 12px;
-      border-radius: 12px;
-      font-size: 18px;
-      text-decoration: none;
-      display: inline-block;
-      transition: 0.3s;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-    .btn:hover {
-      background: #008c5a;
-      transform: translateY(-2px);
-    }
-    .tiktok {
-      background: #000;
-    }
-    .install-btn {
-      background: #ff4500;
-      display: none;
-      margin-top: 25px;
-    }
-    .install-btn.show {
-      display: inline-block;
-    }
+    body {font-family: sans-serif; text-align: center; background: #f0f8ff; padding: 20px; margin: 0;}
+    h1 {color: #00A86B; font-size: 2.2em;}
+    .btn {background: #00A86B; color: white; padding: 16px; margin: 12px; border-radius: 12px; font-size: 18px; text-decoration: none; display: inline-block;}
+    .install-btn {background: #ff4500; display: none; margin-top: 20px;}
+    .install-btn.show {display: inline-block;}
+    .tiktok {background: #000;}
+    .earnings {font-size: 20px; font-weight: bold; color: #333;}
+    .phone-input {padding: 12px; font-size: 16px; width: 80%; border: 1px solid #ccc; border-radius: 8px; margin: 10px;}
   </style>
 </head>
 <body>
   <h1>Breathe. Earn. Power Up. ⚡</h1>
   <p class="earnings">Your Earnings: KSh {{ user.earnings }}</p>
-
   <input type="tel" id="phone" class="phone-input" placeholder="Enter M-Pesa Number" value="{{ phone }}">
-
   <br>
   <a href="#" class="btn" onclick="startBreathing()">START BREATHING</a>
   <br>
   <a href="https://tiktok.com/@BobbyMacharia254" class="btn tiktok">Follow @BobbyMacharia254 ⚡</a>
 
-  <!-- INSTALL BUTTON (PWA) -->
   <div id="installContainer">
-    <a href="#" id="installBtn" class="btn install-btn">Install App on Home Screen</a>
+    <a href="#" id="installBtn" class="btn install-btn">Install App</a>
   </div>
 
   <script>
     let deferredPrompt;
 
-    // Show install button when PWA is installable
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/static/sw.js')
+          .then(reg => console.log('SW registered'))
+          .catch(err => console.log('SW error:', err));
+      });
+    }
+
+    // Show install button
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
       document.getElementById('installBtn').classList.add('show');
     });
 
-    // Trigger install
+    // Install
     document.getElementById('installBtn')?.addEventListener('click', (e) => {
       e.preventDefault();
       if (deferredPrompt) {
@@ -112,10 +71,7 @@
 
     function startBreathing() {
       const phone = document.getElementById('phone').value.trim();
-      if (!phone) {
-        alert("Please enter your M-Pesa number!");
-        return;
-      }
+      if (!phone) return alert("Enter phone number!");
       window.location = `/breathe?phone=${phone}`;
     }
   </script>
