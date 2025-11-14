@@ -93,5 +93,10 @@ def callback():
 def manifest():
     return send_static_file('manifest.json')
 
+# PWA: Serve service worker
+@app.route('/sw.js')
+def service_worker():
+    return send_static_file('sw.js')
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=10000, debug=True)
