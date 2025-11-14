@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request, jsonify, redirect
+from flask import Flask, render_template, request, jsonify, redirect, send_static_file
 import json
 import time
 import base64
 
-app = Flask(__name__)
+# PWA: Serve static files from root
+app = Flask(__name__, static_folder='.', static_url_path='')
 
 # In-memory user database (resets on restart)
 users = {}
@@ -13,7 +14,7 @@ CONSUMER_KEY = "YOUR_CONSUMER_KEY"
 CONSUMER_SECRET = "YOUR_CONSUMER_SECRET"
 SHORTCODE = "174379"
 PASSKEY = "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919"
-CALLBACK_URL = "https://your-ngrok-url.ngrok.io/callback"
+CALLBACK_URL = "https://quantum-breath.onrender.com/callback"
 
 import requests
 
@@ -79,7 +80,7 @@ def earn():
 
 @app.route('/tiktok')
 def tiktok():
-    return redirect("https://tiktok.com/@bullbolt1")
+    return redirect("https://tiktok.com/@BobbyMacharia254")
 
 @app.route('/callback', methods=['POST'])
 def callback():
@@ -87,5 +88,10 @@ def callback():
     print("M-PESA CALLBACK:", data)
     return jsonify({"ResultCode": 0, "ResultDesc": "Accepted"})
 
+# PWA: Serve manifest.json
+@app.route('/manifest.json')
+def manifest():
+    return send_static_file('manifest.json')
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=10000, debug=True)

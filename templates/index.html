@@ -1,30 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quantum Breath</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+  <meta name="theme-color" content="#00A86B">
   <style>
-    body {font-family: sans-serif; text-align: center; background: #f0f8ff; padding: 20px;}
-    h1 {color: #00A86B;}
-    .btn {background: #00A86B; color: white; padding: 15px; margin: 10px; border-radius: 10px; font-size: 18px; text-decoration: none; display: inline-block;}
+    body {font-family: sans-serif; text-align: center; background: #f0f8ff; padding: 20px; margin: 0;}
+    h1 {color: #00A86B; font-size: 2.2em;}
+    .btn {background: #00A86B; color: white; padding: 16px; margin: 12px; border-radius: 12px; font-size: 18px; text-decoration: none; display: inline-block;}
     .tiktok {background: #000;}
     .earnings {font-size: 20px; font-weight: bold; color: #333;}
+    .phone-input {padding: 12px; font-size: 16px; width: 80%; border: 1px solid #ccc; border-radius: 8px; margin: 10px;}
   </style>
 </head>
 <body>
   <h1>Breathe. Earn. Power Up. ⚡</h1>
   <p class="earnings">Your Earnings: KSh {{ user.earnings }}</p>
-  <input type="tel" id="phone" placeholder="Enter Phone" value="{{ phone }}" style="padding:10px;font-size:16px;margin:10px;">
+  <input type="tel" id="phone" class="phone-input" placeholder="Enter M-Pesa Number" value="{{ phone }}">
   <br>
   <a href="#" class="btn" onclick="startBreathing()">START BREATHING</a>
   <br>
-  <a href="/tiktok" class="btn tiktok">Follow @bullbolt1 ⚡</a>
+  <a href="https://tiktok.com/@BobbyMacharia254" class="btn tiktok">Follow @BobbyMacharia254 ⚡</a>
 
   <script>
     function startBreathing() {
       const phone = document.getElementById('phone').value;
       window.location = `/breathe?phone=${phone}`;
     }
+
+    // PWA Install Prompt
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const installBtn = document.createElement('a');
+      installBtn.href = '#';
+      installBtn.className = 'btn';
+      installBtn.style.background = '#ff4500';
+      installBtn.innerText = 'Install App';
+      installBtn.onclick = () => {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(() => {
+          installBtn.style.display = 'none';
+        });
+      };
+      document.body.appendChild(installBtn);
+    });
   </script>
 </body>
 </html>
